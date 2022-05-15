@@ -1,13 +1,15 @@
-import 'package:bmi_calculator/custom/constants.dart';
+import 'package:bmi_app/components/bottom_button.dart';
 import 'package:flutter/material.dart';
-import '../custom/bottomButton.dart';
-import '../custom/reusable_card.dart';
+
+import '../constants.dart';
+import '../components/reusable_card.dart';
 
 class ResultsPage extends StatelessWidget {
-  ResultsPage(
-      {@required this.bmiResult,
-      @required this.interpretation,
-      @required this.resultText});
+  ResultsPage({
+    required this.bmiResult,
+    required this.resultText,
+    required this.interpretation,
+  });
 
   final String bmiResult;
   final String resultText;
@@ -16,7 +18,7 @@ class ResultsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CALCULADORA DE IMC'),
+        title: const Text('BMI CALCULATOR'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -26,8 +28,8 @@ class ResultsPage extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(15.0),
               alignment: Alignment.bottomLeft,
-              child: Text(
-                'Resultado',
+              child: const Text(
+                'Your Result',
                 style: kTitleTextStyle,
               ),
             ),
@@ -35,7 +37,7 @@ class ResultsPage extends StatelessWidget {
           Expanded(
             flex: 5,
             child: ReusableCard(
-              colorSelected: kActiveCardColor,
+              colour: kActiveCardColour,
               cardChild: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,22 +49,19 @@ class ResultsPage extends StatelessWidget {
                   Text(
                     bmiResult,
                     style: kBMITextStyle,
-                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                    child: Text(
-                      interpretation,
-                      style: kBodyTextStyle,
-                    ),
+                  Text(
+                    interpretation,
+                    style: kBodyTextStyle,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
           ),
           BottomButton(
-            label: 'RECALCULAR',
-            onPress: () {
+            buttonTitle: 'RE-CALCULATE',
+            onTap: () {
               Navigator.pop(context);
             },
           ),

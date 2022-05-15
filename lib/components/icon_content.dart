@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
 
-class IconContentCard extends StatelessWidget {
-  IconContentCard({this.genderText, this.genderIcon});
+import '../constants.dart';
 
-  final String genderText;
-  final IconData genderIcon;
+class IconContent extends StatelessWidget {
+  IconContent({required this.label, required this.icon});
+
+  final String label;
+  final IconData icon;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(
-          genderIcon,
+          icon,
           size: 80.0,
         ),
-        SizedBox(
+        const SizedBox(
           height: 15.0,
         ),
         Text(
-          genderText,
+          label,
           style: kLabelTextStyle,
-        )
+        ),
       ],
     );
   }

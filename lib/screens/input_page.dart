@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../custom/reusable_card.dart';
-import '../custom/icon_content.dart';
-import '../custom/constants.dart';
-import '../custom/roundIconButton.dart';
-import '../custom/bottomButton.dart';
+
+import '../components/bottom_button.dart';
+import '../components/icon_content.dart';
+import '../components/reusable_card.dart';
+import '../components/round_icon_button.dart';
 import '../calculator_brain.dart';
+import '../constants.dart';
 import 'results_page.dart';
 
+enum Gender { male, female }
+
 class InputPage extends StatefulWidget {
+  const InputPage({Key? key}) : super(key: key);
+
   @override
   _InputPageState createState() => _InputPageState();
 }
 
 class _InputPageState extends State<InputPage> {
-  Gender selectedGender;
+  Gender? selectedGender;
   int height = 180;
-  int weight = 50;
-  int age = 15;
+  int weight = 55;
+  int age = 22;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('CALCULADORA DE IMC')),
+        title: const Text('BMI CALCULATOR'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
           Expanded(
             child: Row(
               children: <Widget>[
@@ -37,12 +43,12 @@ class _InputPageState extends State<InputPage> {
                         selectedGender = Gender.male;
                       });
                     },
-                    colorSelected: selectedGender == Gender.male
-                        ? kActiveCardColor
-                        : kInactiveCardColor,
-                    cardChild: IconContentCard(
-                      genderIcon: FontAwesomeIcons.mars,
-                      genderText: 'HOMEM',
+                    colour: selectedGender == Gender.male
+                        ? kActiveCardColour
+                        : kInactiveCardColour,
+                    cardChild: IconContent(
+                      icon: FontAwesomeIcons.mars,
+                      label: 'Male',
                     ),
                   ),
                 ),
@@ -53,12 +59,12 @@ class _InputPageState extends State<InputPage> {
                         selectedGender = Gender.female;
                       });
                     },
-                    colorSelected: selectedGender == Gender.female
-                        ? kActiveCardColor
-                        : kInactiveCardColor,
-                    cardChild: IconContentCard(
-                      genderIcon: FontAwesomeIcons.venus,
-                      genderText: 'MULHER',
+                    colour: selectedGender == Gender.female
+                        ? kActiveCardColour
+                        : kInactiveCardColour,
+                    cardChild: IconContent(
+                      icon: FontAwesomeIcons.venus,
+                      label: 'Female',
                     ),
                   ),
                 ),
@@ -67,12 +73,12 @@ class _InputPageState extends State<InputPage> {
           ),
           Expanded(
             child: ReusableCard(
-              colorSelected: kActiveCardColor,
+              colour: kActiveCardColour,
               cardChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    'ALTURA',
+                  const Text(
+                    'HEIGHT',
                     style: kLabelTextStyle,
                   ),
                   Row(
@@ -82,33 +88,32 @@ class _InputPageState extends State<InputPage> {
                     children: <Widget>[
                       Text(
                         height.toString(),
-                        style: kNumbersTextStyle,
+                        style: kNumberTextStyle,
                       ),
-                      Text(
+                      const Text(
                         'cm',
                         style: kLabelTextStyle,
-                      )
+                      ),
                     ],
                   ),
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
+                      inactiveTrackColor: kAccentInactiveColour,
                       activeTrackColor: Colors.white,
-                      inactiveTrackColor: Color(0xFF8D8E98),
-                      thumbColor: kPinkColor,
-                      overlayColor: Color(0x29EB1555),
+                      thumbColor: kAccentColour,
                       thumbShape:
-                          RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                          const RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                      overlayColor: kAccentColourTrans,
                       overlayShape:
-                          RoundSliderOverlayShape(overlayRadius: 30.0),
+                          const RoundSliderOverlayShape(overlayRadius: 30.0),
                     ),
                     child: Slider(
                       value: height.toDouble(),
                       min: 120.0,
                       max: 220.0,
-                      onChanged: (double newHeight) {
-                        print(newHeight);
+                      onChanged: (double newValue) {
                         setState(() {
-                          height = newHeight.round();
+                          height = newValue.round();
                         });
                       },
                     ),
@@ -122,86 +127,79 @@ class _InputPageState extends State<InputPage> {
               children: <Widget>[
                 Expanded(
                   child: ReusableCard(
-                    colorSelected: kActiveCardColor,
+                    colour: kActiveCardColour,
                     cardChild: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'Peso',
+                        const Text(
+                          'WEIGHT',
                           style: kLabelTextStyle,
                         ),
                         Text(
                           weight.toString(),
-                          style: kNumbersTextStyle,
-                        ),
-                        SizedBox(
-                          height: 10,
+                          style: kNumberTextStyle,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RoundIconButton(
                               icon: FontAwesomeIcons.minus,
-                              onPress: () {
+                              onPressed: () {
                                 setState(() {
-                                  //TODO: Adicionar um Toast avisando que o peso não pode ser nulo
-                                  weight >= 1 ? weight-- : null;
+                                  weight--;
                                 });
                               },
                             ),
-                            SizedBox(
-                              width: 15.0,
+                            const SizedBox(
+                              width: 10.0,
                             ),
                             RoundIconButton(
                               icon: FontAwesomeIcons.plus,
-                              onPress: () {
+                              onPressed: () {
                                 setState(() {
                                   weight++;
                                 });
                               },
                             ),
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
                 ),
                 Expanded(
                   child: ReusableCard(
-                    colorSelected: kActiveCardColor,
+                    colour: kActiveCardColour,
                     cardChild: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'IDADE',
+                        const Text(
+                          'Age',
                           style: kLabelTextStyle,
                         ),
                         Text(
                           age.toString(),
-                          style: kNumbersTextStyle,
-                        ),
-                        SizedBox(
-                          height: 15.0,
+                          style: kNumberTextStyle,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RoundIconButton(
                               icon: FontAwesomeIcons.minus,
-                              onPress: () {
+                              onPressed: () {
                                 setState(() {
-                                  age >= 1 ? age-- : null;
+                                  age--;
                                 });
                               },
                             ),
-                            SizedBox(
-                              width: 15.0,
+                            const SizedBox(
+                              width: 10.0,
                             ),
                             RoundIconButton(
                               icon: FontAwesomeIcons.plus,
-                              onPress: () {
+                              onPressed: () {
                                 setState(() {
-                                  age <= 120 ? age++ : null;
+                                  age++;
                                 });
                               },
                             ),
@@ -215,22 +213,23 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           BottomButton(
-            label: 'CALCULAR',
-            onPress: () {
+            buttonTitle: 'CALCULATE',
+            onTap: () {
               CalculatorBrain calc =
                   CalculatorBrain(height: height, weight: weight);
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResultsPage(
                     bmiResult: calc.calculateBMI(),
-                    resultText: calc.getResult(),
                     interpretation: calc.getInterpretation(),
+                    resultText: calc.getResult(),
                   ),
                 ),
               );
             },
-          ),
+          )
         ],
       ),
     );
